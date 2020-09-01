@@ -1,4 +1,4 @@
-# cinema-frontend
+# cinema-site-frontend
 
 ## Project setup
 ```
