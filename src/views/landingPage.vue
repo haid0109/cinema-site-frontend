@@ -56,7 +56,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .buttonUnderline {
   border-bottom: 1px solid grey;
 }
