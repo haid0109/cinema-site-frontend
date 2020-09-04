@@ -45,11 +45,10 @@ export default {
     retrieveLocations: async function(){
       fetch(`http://localhost:2020/cinema/names`)
       .then((resp) => {
-        resp.json().then((namesArr) => {
-          this.cinemaNames = namesArr;
           console.log("retrieve locations: ", resp.status);
-        });
+          return resp.json();
       })
+      .then((resp) => this.cinemaNames = resp)
       .catch((error) => {console.error('Error: ', error);});
     }
   } 
