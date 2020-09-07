@@ -12,13 +12,10 @@
         <img :src="banner" width="100%" height="100%"/>
       </v-carousel-item>
     </v-carousel>
-    <v-row>
-      <v-col cols="2"/>
-      <v-col>
-        <div class="display-4 mt-10 font-weight-bold grey--text text--darken-3">
-          IN CINEMAS
-        </div>
-      </v-col>
+    <v-row class="ma-0 pa-0 justify-center">
+      <div class="font-weight-bold grey--text text--darken-3 header">
+        IN CINEMAS
+      </div>
     </v-row>
   </v-container>
 </template>
@@ -38,3 +35,9 @@ export default {
   } 
 }
 </script>
+
+<style scoped>
+.header{
+  font-size: 6.5vw;
+}
+</style>
