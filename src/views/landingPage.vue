@@ -19,7 +19,7 @@
           height="125"
           width="45%"
           class="font-weight-bold white--text locationButton">
-          <div class="textTopLeft">{{cinema.name}}</div>
+          <div class="header">{{cinema.name}}</div>
         </v-btn>
       </v-col>
       <v-col cols="1"/>
@@ -54,7 +54,7 @@ export default {
   margin-left: 2vw;
   border-bottom: 1px solid grey;
 }
-.v-btn div{
+.header{
   font-size: 4vw;
 }
 </style>
