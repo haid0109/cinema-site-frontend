@@ -1,20 +1,13 @@
 <template>
-  <v-container>
-    <v-row>
+  <v-container fluid ma-0 pa-0>
+    <v-row class="ma-0 pa-0">
       <v-col cols="1"/>
       <v-col cols="10">
         <v-img src="../assets/logo.png" width="500"></v-img>
       </v-col>
-    </v-row>
-    <v-row>
       <v-col cols="1"/>
-      <v-col cols="10">
-        <div class="display-4 ml-5 font-weight-bold grey--text text--darken-3">
-          VÆLG DIN BY
-        </div>
-      </v-col>
     </v-row>
-    <v-row>
+    <v-row class="ma-0 pa-0 justify-center">
       <v-col cols="1"/>
       <v-col cols="10">
         <v-btn
@@ -25,10 +18,11 @@
           :ripple="false"
           height="125"
           width="45%"
-          class="ml-10 display-3 font-weight-bold white--text buttonUnderline">
+          class="font-weight-bold white--text locationButton">
           <div class="textTopLeft">{{cinema.name}}</div>
         </v-btn>
       </v-col>
+      <v-col cols="1"/>
     </v-row>
   </v-container>
 </template>
@@ -56,16 +50,11 @@ export default {
 </script>
 
 <style scoped>
-.buttonUnderline {
+.locationButton {
+  margin-left: 2vw;
   border-bottom: 1px solid grey;
 }
-.v-btn {
-  margin-top: 40px;
-}
-.textTopLeft {
-  text-align: left;
-  margin-top: -50px;
-  height: 100% !important;
-  width: 100% !important;
+.v-btn div{
+  font-size: 4vw;
 }
 </style>
