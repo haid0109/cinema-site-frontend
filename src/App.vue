@@ -4,7 +4,7 @@
     app
     fixed
     dark
-    v-if="$route.name != 'landingPage'"
+    v-if="$route.name != 'landingPage' && $route.name != 'adminLogin'"
     >
       <v-row justify="center" align="center">
         <v-col class="d-none d-md-flex justify-center">
