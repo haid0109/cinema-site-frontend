@@ -14,7 +14,7 @@
           text tile
           v-for="(cinema, index) in cinemaNames"
           :key="index"
-          :href="`${cinema.name}`"
+          :to="{name: 'home', params: { cinema: cinema.name}}"
           :ripple="false"
           height="125"
           width="45%"

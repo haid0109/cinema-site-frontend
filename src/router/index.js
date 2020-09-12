@@ -18,13 +18,8 @@ Vue.use(VueRouter)
     component: adminLogin
   },
   {
-    path: '/København',
-    name: 'chooseMovie',
-    component: chooseMovie
-  },
-  {
-    path: '/Aarhus',
-    name: 'chooseMovie',
+    path: '/:cinema',
+    name: 'home',
     component: chooseMovie
   },
 ]
