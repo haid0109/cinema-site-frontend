@@ -4,8 +4,13 @@
     app
     fixed
     dark
-    v-if="$route.name != 'landingPage' && $route.name != 'adminLogin'"
-    >
+    v-if="
+      $route.name != 'landingPage' &&
+      $route.name != 'adminLogin' &&
+      $route.name != 'adminDashboard' &&
+      $route.name != 'login' &&
+      $route.name != 'register'
+    ">
       <v-row justify="center" align="center">
         <v-col class="d-none d-md-flex justify-center">
           <img  
@@ -18,18 +23,35 @@
           <v-btn icon class="mt-2" @click="search">
               <v-icon>mdi-magnify</v-icon>
           </v-btn>
-          <burgerMenu/>
+          <burgerMenu
+          :login="login"
+          :signUp="signUp"
+          :account="account"
+          :logOut="logOut"
+          @login="openLogin"
+          @signUp="openSignUp"
+          @account="true"
+          @logOut="true"
+          />
         </v-col>
         <v-col class="d-none d-md-flex justify-center">
           <v-toolbar-items>
               <v-btn text color="white">Program</v-btn>
               <v-btn text color="white">Upcoming</v-btn>
-              <v-btn text color="white">Login</v-btn>
-              <v-btn text color="white">Sign up</v-btn>
+              <v-btn text color="white" v-if="login" @click="openLogin">Login</v-btn>
+              <v-btn text color="white" v-if="signUp" @click="openSignUp">Sign up</v-btn>
+              <v-btn text color="white" v-if="account">Account</v-btn>
+              <v-btn text color="white" v-if="logOut">Log Out</v-btn>
           </v-toolbar-items>
         </v-col>
       </v-row>
     </v-app-bar>
+    <v-dialog v-model="loginDialog" width="400px">
+      <authForm :type="'user'" :action="'Login'" @closeDialog="closeLogin"/>
+    </v-dialog>
+    <v-dialog v-model="signUpDialog" width="400px">
+      <authForm :type="'user'" :action="'Sign Up'" @closeDialog="closeSignUp"/>
+    </v-dialog>
     <v-content>
       <router-view/>
     </v-content>
@@ -39,19 +61,39 @@
 <script>
 import searchBar from './components/searchBar';
 import burgerMenu from './components/burgerMenu';
+import authForm from './components/authForm';
 
 export default {
   components: {
     searchBar,
-    burgerMenu
+    burgerMenu,
+    authForm
   },
   data: () => ({
+    login: true,
+    signUp: true,
+    account: false,
+    logOut: false,
+    loginDialog: false,
+    signUpDialog: false,
   }),
   created: async function(){
   },
   methods: {
     search: function(){
       this.$refs.search.searchMovie();
+    },
+    openLogin: function(){
+      this.loginDialog = true;
+    },
+    openSignUp: function(){
+      this.signUpDialog = true;
+    },
+    closeLogin: function(){
+      this.loginDialog = false;
+    },
+    closeSignUp: function(){
+      this.signUpDialog = false;
     }
   }
 }
