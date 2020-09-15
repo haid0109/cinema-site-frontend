@@ -37,7 +37,10 @@ export default {
                     this.movieNames.push(nameObj.name)
                 });
             })
-            .catch((error) => {console.error('Error: ', error);});
+            .catch((error) => {
+                console.error('Error: ', error);
+                alert('Something went wrong, try again');
+            });
         },
         searchMovie: async function(searchValue){
             if(searchValue){this.searchValue = searchValue}

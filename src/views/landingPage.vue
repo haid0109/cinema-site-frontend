@@ -43,7 +43,10 @@ export default {
           return resp.json();
       })
       .then((resp) => this.cinemaNames = resp)
-      .catch((error) => {console.error('Error: ', error);});
+      .catch((error) => {
+        console.error('Error: ', error);
+        alert('Something went wrong, try again');
+      });
     }
   } 
 }

@@ -40,20 +40,30 @@
               <v-btn text color="white">Upcoming</v-btn>
               <v-btn text color="white" v-if="login" @click="openLogin">Login</v-btn>
               <v-btn text color="white" v-if="signUp" @click="openSignUp">Sign up</v-btn>
-              <v-btn text color="white" v-if="account">Account</v-btn>
-              <v-btn text color="white" v-if="logOut">Log Out</v-btn>
+              <v-btn text color="white" v-if="account" to="account">Account</v-btn>
+              <v-btn text color="white" v-if="logOut" @click="loggedOut">Log Out</v-btn>
           </v-toolbar-items>
         </v-col>
       </v-row>
     </v-app-bar>
     <v-dialog v-model="loginDialog" width="400px">
-      <authForm :type="'user'" :action="'Login'" @closeDialog="closeLogin"/>
+      <authForm 
+        :type="'user'" 
+        :action="'Login'"  
+        @closeDialog="closeLogin"
+        @loggedIn="loggedIn"
+      />
     </v-dialog>
     <v-dialog v-model="signUpDialog" width="400px">
-      <authForm :type="'user'" :action="'Sign Up'" @closeDialog="closeSignUp"/>
+      <authForm 
+        :type="'user'" 
+        :action="'Sign Up'" 
+        @closeDialog="closeSignUp"
+        @loggedIn="loggedIn"
+      />
     </v-dialog>
     <v-content>
-      <router-view/>
+      <router-view @loggedIn="loggedIn"/>
     </v-content>
   </v-app>
 </template>
@@ -75,25 +85,32 @@ export default {
     account: false,
     logOut: false,
     loginDialog: false,
-    signUpDialog: false,
+    signUpDialog: false
   }),
   created: async function(){
+    if(sessionStorage.getItem('jwt')) this.loggedIn();
   },
   methods: {
-    search: function(){
-      this.$refs.search.searchMovie();
-    },
-    openLogin: function(){
-      this.loginDialog = true;
-    },
-    openSignUp: function(){
-      this.signUpDialog = true;
-    },
-    closeLogin: function(){
+    search: function(){this.$refs.search.searchMovie();},
+    openLogin: function(){this.loginDialog = true;},
+    openSignUp: function(){this.signUpDialog = true;},
+    closeLogin: function(){this.loginDialog = false;},
+    closeSignUp: function(){this.signUpDialog = false;},
+    loggedIn: function(){
       this.loginDialog = false;
-    },
-    closeSignUp: function(){
       this.signUpDialog = false;
+      this.login = false;
+      this.signUp = false;
+      this.account = true;
+      this.logOut = true;
+    },
+    loggedOut: function(){
+      sessionStorage.setItem('jwt', '');
+      this.login = true;
+      this.signUp = true;
+      this.account = false;
+      this.logOut = false;
+      if(this.$route.name != 'home') this.$router.push('home');
     }
   }
 }
