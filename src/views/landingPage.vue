@@ -14,7 +14,7 @@
           text tile
           v-for="(cinema, index) in cinemaNames"
           :key="index"
-          :to="{name: 'home', params: { cinema: cinema.name}}"
+          @click="goToHome(cinema.name)"
           :ripple="false"
           height="125"
           width="45%"
@@ -47,6 +47,10 @@ export default {
         console.error('Error: ', error);
         alert('Something went wrong, try again');
       });
+    },
+    goToHome: function(cinemaName){
+      sessionStorage.setItem('cinema', cinemaName);
+      this.$router.push(cinemaName);
     }
   } 
 }

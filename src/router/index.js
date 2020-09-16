@@ -20,17 +20,15 @@ const routes = [
     path: '/admin',
     name: 'adminLogin',
     component: adminLogin,
-    children: [
-      {
-        path: '/admin/dashboard',
-        name: 'adminDashboard',
-        component: adminDashboard,
-        meta: {
-          requiresAuth: true,
-          requiresAdmin: true
-        }
-      }
-    ]
+  },
+  {
+    path: '/admin/dashboard',
+    name: 'adminDashboard',
+    component: adminDashboard,
+    meta: {
+      requiresAuth: true,
+      requiresAdmin: true
+    }
   },
   {
     path: '/login',
@@ -64,6 +62,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  if(to.name == 'home' && !sessionStorage.getItem('cinema')) next({path: '/'});
   if(to.matched.some(record => record.meta.requiresAuth)){
     if(to.matched.some(record => record.meta.requiresAdmin)){
       if(!sessionStorage.getItem('jwtAdmin')) next({path: '/admin'});

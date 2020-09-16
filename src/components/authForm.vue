@@ -48,6 +48,17 @@
                 rules.numberOnly,
                 rules.phoneNum
             ]"/>
+
+            <v-select
+            v-model="cinemaValue"
+            :items="items"
+            item-text="name"
+            item-value="_id"
+            class="px-6"
+            label="Cinema"
+            single-line
+            v-if="type == 'admin'"
+            :rules="[rules.required]"/>
             
             <v-card class="ml-auto" >
                 <v-btn
@@ -100,6 +111,8 @@ export default {
         password: '',
         rePassword: '',
         phoneNum: '',
+        items: [],
+        cinemaValue: '',
         show1: false,
         show2: false,
         notFound: false,
@@ -116,14 +129,35 @@ export default {
             phoneNum: value => value.length < 1 || value.length == 8 || 'Phone number must be 8 digits',
         }
     }),
+    created: async function(){
+        await this.retrieveCinemaNames();
+    },
     methods: {
+        retrieveCinemaNames: async function(){
+            fetch(`http://localhost:2020/cinema/names`)
+            .then(async (resp) => {
+                const cinemaNames = await resp.json();
+                this.items = cinemaNames;
+            })
+            .catch((error) => {
+                console.error('Error: ', error);
+                alert('something went wrong, try again');
+            });
+        },
         loginOrSignUp: async function(){
             if(this.action == 'Login') this.login();
             else if(this.action == 'Sign Up') this.signUp();
             else alert('Something went wrong');
         },
         login: async function(){
-            fetch(`http://localhost:2020/${this.type}/login/${this.email}/${this.password}`)
+            let credentials = {
+                email: this.email,
+                password: this.password
+            }
+            let endpoint = `http://localhost:2020/${this.type}/login/${JSON.stringify(credentials)}`;
+            if(this.type == 'admin')
+                endpoint = `http://localhost:2020/${this.type}/login/${this.cinemaValue}/${JSON.stringify(credentials)}`;
+            fetch(endpoint)
             .then(async (resp) => {
                 if(resp.status == 404) return this.notFound = true;
                 else if(resp.status == 400) return this.passwordIncorrect = true;
@@ -133,11 +167,11 @@ export default {
                 if(this.type == 'user'){
                     sessionStorage.setItem('jwt', token);
                     this.$emit('loggedIn');
-                    if(this.extended) this.$router.push('home');
+                    if(this.extended) this.$router.push(sessionStorage.getItem('cinema') || '/');
                 }
                 else if(this.type == 'admin'){
                     sessionStorage.setItem('jwtAdmin', token);
-                    this.$router.push('adminDashboard');
+                    this.$emit('loggedIn');
                 }
             })
             .catch((error) => {
@@ -164,7 +198,7 @@ export default {
                 
                 sessionStorage.setItem('jwt', token);
                 this.$emit('loggedIn');
-                if(this.extended) this.$router.push('home');
+                if(this.extended) this.$router.push(sessionStorage.getItem('cinema') || '/');
             })
             .catch((error) => {
                 console.error('Error: ', error);

@@ -110,7 +110,7 @@ export default {
       this.signUp = true;
       this.account = false;
       this.logOut = false;
-      if(this.$route.name != 'home') this.$router.push('home');
+      if(this.$route.name != 'home') this.$router.push(sessionStorage.getItem('cinema') || '/');
     }
   }
 }
