@@ -21,7 +21,6 @@ export default {
     created: async function(){
         if(sessionStorage.getItem('jwt')) this.$router.push('home');
     }
-  
 }
 </script>
 
