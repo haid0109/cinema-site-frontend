@@ -50,6 +50,7 @@ export default {
             { title: 'Movies', icon: 'mdi-video-vintage' },
             { title: 'Performances', icon: 'mdi-account-group' },
             { title: 'Cinemas', icon: 'mdi-theater' },
+            { title: 'Log Out', icon: 'mdi-exit-to-app' },
         ],
         componentPicker: [
             { title: 'Staff', picked: true },
@@ -62,6 +63,10 @@ export default {
     },
     methods: {
         pickComponent: function(title){
+            if(title == 'Log Out'){
+                sessionStorage.setItem('cinema', '');
+                this.$router.push('/admin');
+            }
             this.componentPicker.forEach(element => {
                 if(element.title == title){element.picked = true;}
                 else{element.picked = false;}

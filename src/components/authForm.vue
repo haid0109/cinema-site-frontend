@@ -171,6 +171,7 @@ export default {
                 }
                 else if(this.type == 'admin'){
                     sessionStorage.setItem('jwtAdmin', token);
+                    sessionStorage.setItem('cinema', this.cinemaValue);
                     this.$emit('loggedIn');
                 }
             })

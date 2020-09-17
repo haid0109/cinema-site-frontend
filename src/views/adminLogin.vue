@@ -19,7 +19,8 @@ import authForm from '../components/authForm';
 export default {
     components: {authForm},
     created: async function(){
-      if(sessionStorage.getItem('jwtAdmin')) this.loggedIn();
+      if(sessionStorage.getItem('jwtAdmin') && sessionStorage.getItem('cinema')) 
+        this.loggedIn();
     },
     methods: {
       loggedIn: function(){

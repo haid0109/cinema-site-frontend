@@ -65,7 +65,8 @@ router.beforeEach((to, from, next) => {
   if(to.name == 'home' && !sessionStorage.getItem('cinema')) next({path: '/'});
   if(to.matched.some(record => record.meta.requiresAuth)){
     if(to.matched.some(record => record.meta.requiresAdmin)){
-      if(!sessionStorage.getItem('jwtAdmin')) next({path: '/admin'});
+      if(!sessionStorage.getItem('jwtAdmin') || !sessionStorage.getItem('cinema')) 
+        next({path: '/admin'});
       else next();
     }
     else{
