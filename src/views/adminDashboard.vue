@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid class="ma-0 pa-0">
+    <v-container fluid class="ma-0 pa-0 fill-height align-start">
         <v-navigation-drawer
             app
             floating
