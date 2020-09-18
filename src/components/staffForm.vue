@@ -9,14 +9,16 @@
                     v-model="firstName"
                     class="px-6"
                     label="First Name"
-                    v-if="action == 'Update' || action == 'Create'"/>
+                    v-if="action == 'Update' || action == 'Create'"
+                    :rules="[rules.required(firstName, action)]"/>
                 </v-col>
                 <v-col class="ma-0 pa-0" cols="6">
                     <v-text-field
                     v-model="lastName"
                     class="px-6"
                     label="Last Name"
-                    v-if="action == 'Update' || action == 'Create'"/>
+                    v-if="action == 'Update' || action == 'Create'"
+                    :rules="[rules.required(lastName, action)]"/>
                 </v-col>
             </v-row>
 
@@ -26,9 +28,9 @@
             label="Email"
             v-if="action == 'Update' || action == 'Create'"
             :rules="[
-                rules.userNotFound(notFound),
                 rules.emailUnique(emailUnique),
-                rules.email
+                rules.email,
+                rules.required(email, action)
             ]"/>
 
             <v-text-field
@@ -38,7 +40,8 @@
             :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
             :type="show1 ? 'text' : 'password'"
             @click:append="show1 = !show1"
-            v-if="action == 'Update' || action == 'Create'"/>
+            v-if="action == 'Update' || action == 'Create'"
+            :rules="[rules.required(password, action)]"/>
             
             <v-text-field
             v-model="rePassword"
@@ -50,6 +53,7 @@
             v-if="action == 'Update' || action == 'Create'"
             :rules="[
                 rules.matchPassword(rePassword, password),
+                rules.required(rePassword, action)
             ]"/>
 
             <v-text-field
@@ -59,14 +63,16 @@
             v-if="action == 'Update' || action == 'Create'"
             :rules="[
                 rules.numberOnly,
-                rules.phoneNum
+                rules.phoneNum,
+                rules.required(phoneNum, action)
             ]"/>
 
             <v-text-field
             v-model="address"
             class="px-6"
             label="Address"
-            v-if="action == 'Update' || action == 'Create'"/>
+            v-if="action == 'Update' || action == 'Create'"
+            :rules="[rules.required(address, action)]"/>
 
             <v-select
             v-model="admin"
@@ -120,15 +126,14 @@ export default {
         admins: [],
         show1: false,
         show2: false,
-        notFound: false,
         emailUnique: true,
         rules: {
-            userNotFound: (notFound) => !notFound || 'User does not exist',
             emailUnique: (emailUnique) => emailUnique || 'Email must be unique',
-            email: value => /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value) || 'Email must be valid',
+            email: value => value.length < 1 || /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value) || 'Email must be valid',
             matchPassword: (rePassword, password) => rePassword == password || 'Password must match',
             numberOnly: value => value.length < 1 || /^\d+$/.test(value) || 'Phone number must be valid',
             phoneNum: value => value.length < 1 || value.length == 8 || 'Phone number must be 8 digits',
+            required: (value, action) => action == 'Update' || !!value || 'Required',
         }
     }),
     created: async function(){
@@ -143,11 +148,6 @@ export default {
                 }
             })
             .then(async (resp) => {
-                if(resp.status == 401){
-                    sessionStorage.setItem('jwt', '');
-                    sessionStorage.setItem('cinema', '');
-                    return this.$router.push('/admin');
-                }
                 const admins = await resp.json();
                 this.admins = admins;
             })
@@ -157,6 +157,41 @@ export default {
             });
         },
         updateAdmin: function(){
+            let admin = {};
+            if(!this.firstName && !this.lastName){/* tslint:disable:no-empty */}
+            else if(!this.firstName || !this.lastName)
+                {return alert('both fields must be filled out if you want to update your name');}
+            else admin.fullName = this.firstName + ' ' + this.lastName;
+
+            if(this.email) admin.email = this.email;
+            if(this.password) admin.password = this.password;
+            if(this.phoneNum) admin.phoneNum = this.phoneNum;
+            if(this.address) admin.address = this.address;
+
+            fetch(`http://localhost:2020/admin/${sessionStorage.getItem('cinema')}`, {
+                method: 'PUT',
+                headers: {
+                    'authorization': `Bearer ${sessionStorage.getItem('jwtAdmin')}`,
+                    'role': 'admin',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(admin)
+            })
+            .then(async (resp) => {
+                if(resp.status == 403) return this.emailUnique = false
+                if(resp.status != 200) return alert('something went wrong, try again');
+                this.firstName = '';
+                this.lastName = '';
+                this.email = '';
+                this.password = '';
+                this.rePassword = '';
+                this.phoneNum = '';
+                this.address = '';
+            })
+            .catch((error) => {
+                console.error('Error: ', error);
+                alert('something went wrong, try again');
+            });
         },
         createAdmin: function(){
         },
