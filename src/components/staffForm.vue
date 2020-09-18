@@ -140,7 +140,7 @@ export default {
         await this.retrieveAdmins();
     },
     methods: {
-        retrieveAdmins: function(){
+        retrieveAdmins: async function(){
             fetch(`http://localhost:2020/admin/names/${sessionStorage.getItem('cinema')}`, {
                 headers: {
                     authorization: `Bearer ${sessionStorage.getItem('jwtAdmin')}`,
@@ -177,7 +177,7 @@ export default {
                 },
                 body: JSON.stringify(admin)
             })
-            .then(async (resp) => {
+            .then((resp) => {
                 if(resp.status == 403) return this.emailUnique = false
                 if(resp.status != 200) return alert('something went wrong, try again');
                 this.firstName = '';
@@ -194,8 +194,59 @@ export default {
             });
         },
         createAdmin: function(){
+            let admin = {
+                fullName: this.firstName + ' ' + this.lastName,
+                email: this.email,
+                password: this.password,
+                phoneNum: this.phoneNum,
+                address: this.address
+
+            }
+
+            fetch(`http://localhost:2020/admin/${sessionStorage.getItem('cinema')}`, {
+                method: 'POST',
+                headers: {
+                    'authorization': `Bearer ${sessionStorage.getItem('jwtAdmin')}`,
+                    'role': 'admin',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(admin)
+            })
+            .then(async (resp) => {
+                if(resp.status == 403) return this.emailUnique = false
+                if(resp.status != 200) return alert('something went wrong, try again');
+                this.firstName = '';
+                this.lastName = '';
+                this.email = '';
+                this.password = '';
+                this.rePassword = '';
+                this.phoneNum = '';
+                this.address = '';
+                await this.retrieveAdmins();
+            })
+            .catch((error) => {
+                console.error('Error: ', error);
+                alert('something went wrong, try again');
+            });
         },
         deleteAdmin: function(){
+            fetch(`http://localhost:2020/admin/${sessionStorage.getItem('cinema')}`, {
+                method: 'DELETE',
+                headers: {
+                    'authorization': `Bearer ${sessionStorage.getItem('jwtAdmin')}`,
+                    'role': 'admin',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({_id: this.admin})
+            })
+            .then(async (resp) => {
+                if(resp.status != 200) return alert('something went wrong, try again');
+                await this.retrieveAdmins();
+            })
+            .catch((error) => {
+                console.error('Error: ', error);
+                alert('something went wrong, try again');
+            });
         }
     }
 }

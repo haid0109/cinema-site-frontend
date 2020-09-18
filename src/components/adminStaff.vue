@@ -50,8 +50,6 @@ export default {
             {title: 'Delete Admin', picked: false},
         ]
     }),
-    created: async function(){
-    },
     methods: {
         pickTab: function(title){
             this.tabPicker.forEach(element => {
