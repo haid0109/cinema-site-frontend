@@ -38,8 +38,8 @@
           <v-toolbar-items>
               <v-btn text color="white">Program</v-btn>
               <v-btn text color="white">Upcoming</v-btn>
-              <v-btn text color="white" v-if="login" @click="openLogin">Login</v-btn>
-              <v-btn text color="white" v-if="signUp" @click="openSignUp">Sign up</v-btn>
+              <v-btn text color="white" v-if="login" @click="loginDialog = true">Login</v-btn>
+              <v-btn text color="white" v-if="signUp" @click="signUpDialog = true">Sign up</v-btn>
               <v-btn text color="white" v-if="account" to="account">Account</v-btn>
               <v-btn text color="white" v-if="logOut" @click="loggedOut">Log Out</v-btn>
           </v-toolbar-items>
@@ -92,8 +92,6 @@ export default {
   },
   methods: {
     search: function(){this.$refs.search.searchMovie();},
-    openLogin: function(){this.loginDialog = true;},
-    openSignUp: function(){this.signUpDialog = true;},
     closeLogin: function(){this.loginDialog = false;},
     closeSignUp: function(){this.signUpDialog = false;},
     loggedIn: function(){
