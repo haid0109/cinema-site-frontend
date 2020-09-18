@@ -1,10 +1,12 @@
 <template>
     <v-container fluid fill-height class="d-flex justify-center">
         <v-autocomplete
-        label="search movie name"
+        label="search movie title"
         v-model="clickItem"
         :search-input.sync="searchValue"
-        :items="movieNames"
+        :items="movies"
+        item-text="title"
+        item-value="_id"
         append-icon=""
         solo-inverted
         clearable
@@ -18,24 +20,19 @@
 export default {
     props: ['search'],
     data: () => ({
-        movieNames: [],
+        movies: [],
         searchValue: '',
         clickItem: '',
     }),
     created: async function(){
-        await this.retrieveMovieNames();
+        await this.retrieveMovieTitles();
     },
     methods: {
-        retrieveMovieNames: async function(){
-            fetch(`http://localhost:2020/movie/names`)
-            .then((resp) => {
-                console.log("retrieve movie names: ", resp.status);
-                return resp.json();
-            })
-            .then((resp) => {
-                resp.forEach(nameObj => {
-                    this.movieNames.push(nameObj.name)
-                });
+        retrieveMovieTitles: async function(){
+            fetch(`http://localhost:2020/movie/titles`)
+            .then(async (resp) => {
+                const movies = await resp.json();
+                this.movies = movies;
             })
             .catch((error) => {
                 console.error('Error: ', error);

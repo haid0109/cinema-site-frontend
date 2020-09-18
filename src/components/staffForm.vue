@@ -10,7 +10,8 @@
                     class="px-6"
                     label="First Name"
                     v-if="action == 'Update' || action == 'Create'"
-                    :rules="[rules.required(firstName, action)]"/>
+                    :rules="[rules.required(firstName, action)]"
+                    />
                 </v-col>
                 <v-col class="ma-0 pa-0" cols="6">
                     <v-text-field
@@ -18,7 +19,8 @@
                     class="px-6"
                     label="Last Name"
                     v-if="action == 'Update' || action == 'Create'"
-                    :rules="[rules.required(lastName, action)]"/>
+                    :rules="[rules.required(lastName, action)]"
+                    />
                 </v-col>
             </v-row>
 
@@ -41,7 +43,8 @@
             :type="show1 ? 'text' : 'password'"
             @click:append="show1 = !show1"
             v-if="action == 'Update' || action == 'Create'"
-            :rules="[rules.required(password, action)]"/>
+            :rules="[rules.required(password, action)]"
+            />
             
             <v-text-field
             v-model="rePassword"
@@ -72,38 +75,49 @@
             class="px-6"
             label="Address"
             v-if="action == 'Update' || action == 'Create'"
-            :rules="[rules.required(address, action)]"/>
+            :rules="[rules.required(address, action)]"
+            />
 
-            <v-select
+            <v-autocomplete
             v-model="admin"
             :items="admins"
             item-text="fullName"
             item-value="_id"
             class="px-6"
-            label="Admins"
-            single-line
-            v-if="action == 'Delete'"/>
+            label="Admin"
+            clearable
+            v-if="action == 'Delete'"
+            />
             
             <v-card class="ml-auto">
+                <v-btn
+                class="ml-auto mr-4 mb-4"
+                @click="clear"
+                >
+                    Clear
+                </v-btn>
 
                 <v-btn
                 class="ml-auto mr-4 mb-4"
                 @click="updateAdmin"
-                v-if="action == 'Update'">
+                v-if="action == 'Update'"
+                >
                     Update
                 </v-btn>
 
                 <v-btn
                 class="ml-auto mr-4 mb-4"
                 @click="createAdmin"
-                v-if="action == 'Create'">
+                v-if="action == 'Create'"
+                >
                     Create
                 </v-btn>
                 
                 <v-btn
                 class="ml-auto mr-4 mb-4"
                 @click="deleteAdmin"
-                v-if="action == 'Delete'">
+                v-if="action == 'Delete'"
+                >
                     Delete
                 </v-btn>
             </v-card>
@@ -178,15 +192,9 @@ export default {
                 body: JSON.stringify(admin)
             })
             .then((resp) => {
-                if(resp.status == 403) return this.emailUnique = false
+                if(resp.status == 403) return this.emailUnique = false;
                 if(resp.status != 200) return alert('something went wrong, try again');
-                this.firstName = '';
-                this.lastName = '';
-                this.email = '';
-                this.password = '';
-                this.rePassword = '';
-                this.phoneNum = '';
-                this.address = '';
+                this.clear();
             })
             .catch((error) => {
                 console.error('Error: ', error);
@@ -200,7 +208,6 @@ export default {
                 password: this.password,
                 phoneNum: this.phoneNum,
                 address: this.address
-
             }
 
             fetch(`http://localhost:2020/admin/${sessionStorage.getItem('cinema')}`, {
@@ -215,13 +222,7 @@ export default {
             .then(async (resp) => {
                 if(resp.status == 403) return this.emailUnique = false
                 if(resp.status != 200) return alert('something went wrong, try again');
-                this.firstName = '';
-                this.lastName = '';
-                this.email = '';
-                this.password = '';
-                this.rePassword = '';
-                this.phoneNum = '';
-                this.address = '';
+                this.clear();
                 await this.retrieveAdmins();
             })
             .catch((error) => {
@@ -247,6 +248,16 @@ export default {
                 console.error('Error: ', error);
                 alert('something went wrong, try again');
             });
+        },
+        clear: function(){
+            this.firstName = '';
+            this.lastName = '';
+            this.email = '';
+            this.password = '';
+            this.rePassword = '';
+            this.phoneNum = '';
+            this.address = '';
+            this.admin = '';
         }
     }
 }
