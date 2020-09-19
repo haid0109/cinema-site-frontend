@@ -3,6 +3,17 @@
         <v-card class="d-flex flex-column" dark>
             <v-card-title>{{action}}</v-card-title>
 
+            <v-autocomplete
+            v-model="cinema"
+            :items="cinemas"
+            item-text="name"
+            item-value="_id"
+            class="px-6"
+            label="Cinema"
+            clearable
+            v-if="action == 'Create' || action == 'Delete'"
+            />
+
             <v-row class="ma-0 pa-0">
                 <v-col class="ma-0 pa-0" cols="6">
                     <v-text-field
@@ -129,6 +140,7 @@
 export default {
     props: ['action', 'clearForm', 'getInfo'],
     data: () => ({
+        cinema: '',
         firstName: '',
         lastName: '',
         email: '',
@@ -137,6 +149,7 @@ export default {
         phoneNum: '',
         address: '',
         admin: '',
+        cinemas: [],
         admins: [],
         show1: false,
         show2: false,
@@ -151,20 +164,15 @@ export default {
         }
     }),
     created: async function(){
-        await this.retrieveAdmins();
+        await this.retrieveCinemas();
         await this.retrieveInfo();
     },
     methods: {
-        retrieveAdmins: async function(){
-            fetch(`http://localhost:2020/admin/names/${sessionStorage.getItem('cinema')}`, {
-                headers: {
-                    authorization: `Bearer ${sessionStorage.getItem('jwtAdmin')}`,
-                    role: 'admin'
-                }
-            })
+        retrieveCinemas: async function(){
+            fetch(`http://localhost:2020/cinema/names`)
             .then(async (resp) => {
-                const admins = await resp.json();
-                this.admins = admins;
+                const cinemas = await resp.json();
+                this.cinemas = cinemas;
             })
             .catch((error) => {
                 console.error('Error: ', error);
@@ -188,6 +196,22 @@ export default {
                 this.phoneNum = '' + info.phoneNum;
                 this.address = info.address;
                 this.admin = info.admin;
+            })
+            .catch((error) => {
+                console.error('Error: ', error);
+                alert('something went wrong, try again');
+            });
+        },
+        retrieveAdmins: async function(){
+            fetch(`http://localhost:2020/admin/names/${this.cinema}`, {
+                headers: {
+                    authorization: `Bearer ${sessionStorage.getItem('jwtAdmin')}`,
+                    role: 'admin'
+                }
+            })
+            .then(async (resp) => {
+                const admins = await resp.json();
+                this.admins = admins;
             })
             .catch((error) => {
                 console.error('Error: ', error);
@@ -226,6 +250,7 @@ export default {
             });
         },
         createAdmin: function(){
+            if(!this.cinema) return alert('you need to specify a cinema');
             if(
                 !this.firstName ||
                 !this.lastName ||
@@ -244,7 +269,7 @@ export default {
                 address: this.address
             }
 
-            fetch(`http://localhost:2020/admin/${sessionStorage.getItem('cinema')}`, {
+            fetch(`http://localhost:2020/admin/${this.cinema}`, {
                 method: 'POST',
                 headers: {
                     'authorization': `Bearer ${sessionStorage.getItem('jwtAdmin')}`,
@@ -257,7 +282,6 @@ export default {
                 if(resp.status == 403) return this.emailUnique = false
                 if(resp.status != 200) return alert('something went wrong, try again');
                 this.clear();
-                await this.retrieveAdmins();
             })
             .catch((error) => {
                 console.error('Error: ', error);
@@ -265,7 +289,8 @@ export default {
             });
         },
         deleteAdmin: function(){
-            fetch(`http://localhost:2020/admin/${sessionStorage.getItem('cinema')}`, {
+            if(!this.cinema) return alert('you need to specify a cinema');
+            fetch(`http://localhost:2020/admin/${this.cinema}`, {
                 method: 'DELETE',
                 headers: {
                     'authorization': `Bearer ${sessionStorage.getItem('jwtAdmin')}`,
@@ -284,6 +309,7 @@ export default {
             });
         },
         clear: function(){
+            this.cinema = '';
             this.firstName = '';
             this.lastName = '';
             this.email = '';
@@ -295,6 +321,9 @@ export default {
         }
     },
     watch: {
+        cinema: function(){
+            if(this.cinema) this.retrieveAdmins();
+        },
         clearForm: function(){
             if(this.clearForm){
                 this.clear();
