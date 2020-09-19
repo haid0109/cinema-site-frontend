@@ -147,8 +147,8 @@
 </template>
 
 <script>
-import timeForm from './timeForm';
-import dateForm from './dateForm';
+import timeForm from '../timeForm';
+import dateForm from '../dateForm';
 
 export default {
     components: {

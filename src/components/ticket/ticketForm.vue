@@ -8,8 +8,6 @@ export default {
     components: {},
     data: () => ({
     }),
-    created: async function(){
-    },
     methods: {
     }
 }

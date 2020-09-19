@@ -24,39 +24,44 @@
             </v-list-item>
           </v-list>
         </v-navigation-drawer>
-        <adminStaff v-if="componentPicker[0].picked"/>
-        <adminMovies v-if="componentPicker[1].picked"/>
-        <adminPerformances v-if="componentPicker[2].picked"/>
+        <adminTickets v-if="componentPicker[0].picked"/>
+        <adminPerformances v-if="componentPicker[1].picked"/>
+        <adminMovies v-if="componentPicker[2].picked"/>
         <adminCinemas v-if="componentPicker[3].picked"/>
+        <adminStaff v-if="componentPicker[4].picked"/>
     </v-container>
 </template>
 
 <script>
-import adminStaff from '../components/adminStaff';
-import adminMovies from '../components/adminMovies';
-import adminPerformances from '../components/adminPerformances';
-import adminCinemas from '../components/adminCinemas';
+import adminTickets from '../components/ticket/adminTickets';
+import adminPerformances from '../components/performance/adminPerformances';
+import adminMovies from '../components/movie/adminMovies';
+import adminCinemas from '../components/cinema/adminCinemas';
+import adminStaff from '../components/staff/adminStaff';
 
 export default {
     components: {
-        adminStaff,
-        adminMovies,
+        adminTickets,
         adminPerformances,
-        adminCinemas
+        adminMovies,
+        adminCinemas,
+        adminStaff,
     },
     data: () => ({
         items: [
-            { title: 'Staff', icon: 'mdi-account-cog' },
-            { title: 'Movies', icon: 'mdi-video-vintage' },
+            { title: 'Tickets', icon: 'mdi-ticket-confirmation' },
             { title: 'Performances', icon: 'mdi-account-group' },
+            { title: 'Movies', icon: 'mdi-video-vintage' },
             { title: 'Cinemas', icon: 'mdi-theater' },
+            { title: 'Staff', icon: 'mdi-account-cog' },
             { title: 'Log Out', icon: 'mdi-exit-to-app' },
         ],
         componentPicker: [
-            { title: 'Staff', picked: true },
-            { title: 'Movies', picked: false },
+            { title: 'Tickets', picked: true },
             { title: 'Performances', picked: false },
+            { title: 'Movies', picked: false },
             { title: 'Cinemas', picked: false },
+            { title: 'Staff', picked: false },
         ]
     }),
     created: async function(){
