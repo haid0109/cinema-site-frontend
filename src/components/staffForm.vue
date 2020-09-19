@@ -127,7 +127,7 @@
 
 <script>
 export default {
-    props: ['action'],
+    props: ['action', 'clearForm', 'getInfo'],
     data: () => ({
         firstName: '',
         lastName: '',
@@ -152,6 +152,7 @@ export default {
     }),
     created: async function(){
         await this.retrieveAdmins();
+        await this.retrieveInfo();
     },
     methods: {
         retrieveAdmins: async function(){
@@ -164,6 +165,29 @@ export default {
             .then(async (resp) => {
                 const admins = await resp.json();
                 this.admins = admins;
+            })
+            .catch((error) => {
+                console.error('Error: ', error);
+                alert('something went wrong, try again');
+            });
+        },
+        retrieveInfo: async function(){
+            fetch(`http://localhost:2020/admin/${sessionStorage.getItem('cinema')}`, {
+                headers: {
+                    authorization: `Bearer ${sessionStorage.getItem('jwtAdmin')}`,
+                    role: 'admin'
+                }
+            })
+            .then(async (resp) => {
+                const info = await resp.json();
+                this.firstName = info.fullName.split(' ')[0];
+                this.lastName = info.fullName.split(' ')[1];
+                this.email = info.email;
+                this.password = info.password;
+                this.rePassword = info.password;
+                this.phoneNum = '' + info.phoneNum;
+                this.address = info.address;
+                this.admin = info.admin;
             })
             .catch((error) => {
                 console.error('Error: ', error);
@@ -258,6 +282,20 @@ export default {
             this.phoneNum = '';
             this.address = '';
             this.admin = '';
+        }
+    },
+    watch: {
+        clearForm: function(){
+            if(this.clearForm){
+                this.clear();
+                this.$emit('formCleared');
+            }
+        },
+        getInfo: function(){
+            if(this.getInfo){
+                this.retrieveInfo();
+                this.$emit('gotInfo');
+            }
         }
     }
 }

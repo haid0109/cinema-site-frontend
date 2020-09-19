@@ -17,16 +17,24 @@
             <staffForm
             v-if="tabPicker[0].picked"
             :action="'Update'"
+            :clearForm="clearForm"
+            :getInfo="getInfo"
+            @formCleared="formCleared"
+            @gotInfo="gotInfo"
             />
             
             <staffForm
             v-if="tabPicker[1].picked"
             :action="'Create'"
+            :clearForm="clearForm"
+            @formCleared="formCleared"
             />
             
             <staffForm
             v-if="tabPicker[2].picked"
             :action="'Delete'"
+            :clearForm="clearForm"
+            @formCleared="formCleared"
             />
         </v-card>
     </v-container>
@@ -48,15 +56,21 @@ export default {
             {title: 'Update Your Information', picked: true},
             {title: 'Create Admin', picked: false},
             {title: 'Delete Admin', picked: false},
-        ]
+        ],
+        clearForm: false,
+        getInfo: false
     }),
     methods: {
         pickTab: function(title){
+            this.clearForm = true;
             this.tabPicker.forEach(element => {
                 if(element.title == title){element.picked = true;}
                 else{element.picked = false;}
+                if(element.title == 'Update Your Information') this.getInfo = true;
             });
-        }
+        },
+        formCleared: function(){this.clearForm = false;},
+        gotInfo: function(){this.getInfo = false;}
     }
 }
 </script>
