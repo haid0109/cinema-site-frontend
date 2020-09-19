@@ -29,7 +29,7 @@ export default {
     },
     methods: {
         retrieveMovieTitles: async function(){
-            fetch(`http://localhost:2020/movie/titles`)
+            fetch(`http://localhost:2020/movies/titles`)
             .then(async (resp) => {
                 const movies = await resp.json();
                 this.movies = movies;

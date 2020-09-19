@@ -155,7 +155,7 @@ export default {
         timeForm,
         dateForm,
     },
-    props: ['action'],
+    props: ['action', 'clearForm'],
     data: () => ({
         movie: '',
         title: '',
@@ -202,10 +202,37 @@ export default {
     },
     methods: {
         retrieveMovies: async function(){
-            fetch(`http://localhost:2020/movie/titles`)
+            fetch(`http://localhost:2020/movies/titles`)
             .then(async (resp) => {
                 const movies = await resp.json();
                 this.movies = movies;
+            })
+            .catch((error) => {
+                console.error('Error: ', error);
+                alert('something went wrong, try again');
+            });
+        },
+        retrieveInfo: async function(){
+            fetch(`http://localhost:2020/movie/${this.movie}`)
+            .then(async (resp) => {
+                const info = await resp.json();
+                
+                if(info.release){
+                    info.release = new Date(Date.parse(info.release));
+                    let year = info.release.getFullYear();
+                    let month = ('0' + (info.release.getMonth() + 1)).slice(-2);
+                    let day = info.release.getDate();
+                    info.release = year + '-' + month + '-' + day;
+                }
+
+                this.title = info.title;
+                this.status = info.status;
+                this.length = info.length;
+                this.bio = info.bio;
+                this.release = info.release;
+                this.trailer = info.trailer;
+                this.rating = info.rating;
+                this.genres = info.genre;
             })
             .catch((error) => {
                 console.error('Error: ', error);
@@ -264,13 +291,11 @@ export default {
         },
         updateMovie: function(){
             let formData = new FormData();
+            let movie = {};
 
-            if(!this.title || !this.status) return alert('you need to specify a title and status');
-            let movie = {
-                title: this.title,
-                status: this.status,
-            }
-
+            if(!this.movie) return alert('you need to specify a movie');
+            if(this.title) movie.title = this.title;
+            if(this.status) movie.status = this.status;
             if(this.length) movie.length = this.length;
             if(this.bio) movie.bio = this.bio;
             if(this.release) movie.release = this.release;
@@ -330,6 +355,17 @@ export default {
             this.trailer = '';
             this.rating = '';
             this.genres = [];
+        }
+    },
+    watch: {
+        clearForm: function(){
+            if(this.clearForm){
+                this.clear();
+                this.$emit('formCleared');
+            }
+        },
+        movie: function(){
+            if(this.movie) this.retrieveInfo();
         }
     }
 }

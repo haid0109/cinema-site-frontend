@@ -17,16 +17,22 @@
             <moviesForm
             v-if="tabPicker[0].picked"
             :action="'Add'"
+            :clearForm="clearForm"
+            @formCleared="formCleared"
             />
             
             <moviesForm
             v-if="tabPicker[1].picked"
             :action="'Update'"
+            :clearForm="clearForm"
+            @formCleared="formCleared"
             />
             
             <moviesForm
             v-if="tabPicker[2].picked"
             :action="'Delete'"
+            :clearForm="clearForm"
+            @formCleared="formCleared"
             />
         </v-card>
     </v-container>
@@ -48,15 +54,18 @@ export default {
             {title: 'Add Movie', picked: true},
             {title: 'Update Movie Information', picked: false},
             {title: 'Delete Movie', picked: false},
-        ]
+        ],
+        clearForm: false
     }),
     methods: {
         pickTab: function(title){
+            this.clearForm = true;
             this.tabPicker.forEach(element => {
                 if(element.title == title){element.picked = true;}
                 else{element.picked = false;}
             });
-        }
+        },
+        formCleared: function(){this.clearForm = false;}
     }
 }
 </script>
