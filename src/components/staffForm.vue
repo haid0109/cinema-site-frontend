@@ -226,6 +226,16 @@ export default {
             });
         },
         createAdmin: function(){
+            if(
+                !this.firstName ||
+                !this.lastName ||
+                !this.email ||
+                !this.password ||
+                !this.rePassword ||
+                !this.phoneNum ||
+                !this.address
+            ) return alert('some or all of the fields are empty');
+
             let admin = {
                 fullName: this.firstName + ' ' + this.lastName,
                 email: this.email,
