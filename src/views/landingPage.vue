@@ -37,7 +37,7 @@ export default {
   },
   methods: {
     retrieveLocations: async function(){
-      fetch(`http://localhost:2020/cinema/names`)
+      fetch(`http://localhost:2020/cinemas/names`)
       .then((resp) => {
           console.log("retrieve locations: ", resp.status);
           return resp.json();

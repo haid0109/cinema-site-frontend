@@ -134,7 +134,7 @@ export default {
     },
     methods: {
         retrieveCinemaNames: async function(){
-            fetch(`http://localhost:2020/cinema/names`)
+            fetch(`http://localhost:2020/cinemas/names`)
             .then(async (resp) => {
                 const cinemaNames = await resp.json();
                 this.items = cinemaNames;

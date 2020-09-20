@@ -169,7 +169,7 @@ export default {
     },
     methods: {
         retrieveCinemas: async function(){
-            fetch(`http://localhost:2020/cinema/names`)
+            fetch(`http://localhost:2020/cinemas/names`)
             .then(async (resp) => {
                 const cinemas = await resp.json();
                 this.cinemas = cinemas;

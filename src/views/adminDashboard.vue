@@ -27,8 +27,9 @@
         <adminTickets v-if="componentPicker[0].picked"/>
         <adminPerformances v-if="componentPicker[1].picked"/>
         <adminMovies v-if="componentPicker[2].picked"/>
-        <adminCinemas v-if="componentPicker[3].picked"/>
-        <adminStaff v-if="componentPicker[4].picked"/>
+        <adminHalls v-if="componentPicker[3].picked"/>
+        <adminCinemas v-if="componentPicker[4].picked"/>
+        <adminStaff v-if="componentPicker[5].picked"/>
     </v-container>
 </template>
 
@@ -36,6 +37,7 @@
 import adminTickets from '../components/ticket/adminTickets';
 import adminPerformances from '../components/performance/adminPerformances';
 import adminMovies from '../components/movie/adminMovies';
+import adminHalls from '../components/hall/adminHalls';
 import adminCinemas from '../components/cinema/adminCinemas';
 import adminStaff from '../components/staff/adminStaff';
 
@@ -44,6 +46,7 @@ export default {
         adminTickets,
         adminPerformances,
         adminMovies,
+        adminHalls,
         adminCinemas,
         adminStaff,
     },
@@ -52,6 +55,7 @@ export default {
             { title: 'Tickets', icon: 'mdi-ticket-confirmation' },
             { title: 'Performances', icon: 'mdi-account-group' },
             { title: 'Movies', icon: 'mdi-video-vintage' },
+            { title: 'Halls', icon: 'mdi-car-seat ' },
             { title: 'Cinemas', icon: 'mdi-theater' },
             { title: 'Staff', icon: 'mdi-account-cog' },
             { title: 'Log Out', icon: 'mdi-exit-to-app' },
@@ -60,6 +64,7 @@ export default {
             { title: 'Tickets', picked: true },
             { title: 'Performances', picked: false },
             { title: 'Movies', picked: false },
+            { title: 'Halls', picked: false },
             { title: 'Cinemas', picked: false },
             { title: 'Staff', picked: false },
         ]
