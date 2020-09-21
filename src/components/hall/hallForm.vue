@@ -267,7 +267,7 @@ export default {
                     'role': 'admin',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({name: 'Hall 1'})
+                body: JSON.stringify({_id: this.hall})
             })
             .then(async (resp) => {
                 if(resp.status != 200) return alert('something went wrong, try again');
@@ -295,7 +295,7 @@ export default {
             if(this.cinema) this.retrieveHalls();
         },
         hall: function(){
-            // if(this.hall) this.retrieveInfo();
+            if(this.hall) this.retrieveInfo();
         },
         rowNum: function(){
             if(this.gotInfo) return this.gotInfo = false;
