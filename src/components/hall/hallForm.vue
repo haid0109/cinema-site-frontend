@@ -163,7 +163,7 @@ export default {
             });
         },
         retrieveHalls: async function(){
-            fetch(`http://localhost:2020/halls/names/${this.cinema}`)
+            fetch(`http://localhost:2020/cinema/halls/names/${this.cinema}`)
             .then(async (resp) => {
                 const halls = await resp.json();
                 this.halls = halls;
@@ -174,7 +174,7 @@ export default {
             });
         },
         retrieveInfo: async function(){
-            fetch(`http://localhost:2020/hall/${this.cinema}/${this.hall}`)
+            fetch(`http://localhost:2020/cinema/hall/${this.cinema}/${this.hall}`)
             .then(async (resp) => {
                 const info = await resp.json();
                 this.gotInfo = true;
@@ -205,7 +205,7 @@ export default {
                 rows: this.rows
             }
 
-            fetch(`http://localhost:2020/hall/${this.cinema}`, {
+            fetch(`http://localhost:2020/cinema/hall/${this.cinema}`, {
                 method: 'POST',
                 headers: {
                     'authorization': `Bearer ${sessionStorage.getItem('jwtAdmin')}`,
@@ -245,7 +245,7 @@ export default {
 
             if(error) return alert(error);
 
-            fetch(`http://localhost:2020/hall/${this.cinema}/${this.hall}`, {
+            fetch(`http://localhost:2020/cinema/hall/${this.cinema}/${this.hall}`, {
                 method: 'PUT',
                 headers: {
                     'authorization': `Bearer ${sessionStorage.getItem('jwtAdmin')}`,
@@ -265,7 +265,7 @@ export default {
             });
         },
         deleteHall: function(){
-            fetch(`http://localhost:2020/hall/${this.cinema}`, {
+            fetch(`http://localhost:2020/cinema/hall/${this.cinema}`, {
                 method: 'DELETE',
                 headers: {
                     'authorization': `Bearer ${sessionStorage.getItem('jwtAdmin')}`,
