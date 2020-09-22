@@ -20,7 +20,7 @@
             <v-btn
             dark
             class="ml-auto mr-2"
-            @click="$emit('setReleaseDate', date)"
+            @click="$emit('setDate', date)"
             >
                 Pick
             </v-btn>

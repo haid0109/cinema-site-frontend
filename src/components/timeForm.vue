@@ -20,7 +20,7 @@
             <v-btn
             dark
             class="ml-auto mr-2"
-            @click="$emit('setLength', time)"
+            @click="$emit('setTime', time)"
             >
                 Pick
             </v-btn>

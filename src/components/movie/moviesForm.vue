@@ -134,13 +134,13 @@
         <v-dialog v-model="timeDialog" width="300px">
             <timeForm
             @closeTimeDialog="closeTimeDialog"
-            @setLength="setLength"
+            @setTime="setLength"
             />
         </v-dialog>
         <v-dialog v-model="dateDialog" width="300px">
             <dateForm
             @closeDateDialog="closeDateDialog"
-            @setReleaseDate="setReleaseDate"
+            @setDate="setReleaseDate"
             />
         </v-dialog>
     </v-container>
@@ -218,10 +218,10 @@ export default {
                 const info = await resp.json();
                 
                 if(info.release){
-                    info.release = new Date(Date.parse(info.release));
+                    info.release = new Date(info.release);
                     let year = info.release.getFullYear();
                     let month = ('0' + (info.release.getMonth() + 1)).slice(-2);
-                    let day = info.release.getDate();
+                    let day = ('0' + info.release.getDate()).slice(-2);
                     info.release = year + '-' + month + '-' + day;
                 }
 
