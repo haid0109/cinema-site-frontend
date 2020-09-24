@@ -7,6 +7,8 @@ import login from '../views/login.vue';
 import register from '../views/register.vue';
 import account from '../views/account.vue';
 import chooseMovie from '../views/chooseMovie.vue';
+import movie from '../views/movie.vue';
+import performance from '../views/performance.vue';
 
 Vue.use(VueRouter)
 
@@ -53,6 +55,21 @@ const routes = [
     name: 'home',
     component: chooseMovie
   },
+  {
+    path: '/:cinema/:date',
+    name: 'home',
+    component: chooseMovie
+  },
+  {
+    path: '/:cinema/movie/:movieId',
+    name: 'home',
+    component: movie
+  },
+  {
+    path: '/:cinema/movie/:movieId/:start',
+    name: 'home',
+    component: performance
+  },
 ]
 
 const router = new VueRouter({
@@ -62,10 +79,10 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if(to.name == 'home' && !sessionStorage.getItem('cinema')) next({path: '/'});
+  if(to.name == 'home' && (!sessionStorage.getItem('cinemaName') || !sessionStorage.getItem('cinemaId'))) next({path: '/'});
   if(to.matched.some(record => record.meta.requiresAuth)){
     if(to.matched.some(record => record.meta.requiresAdmin)){
-      if(!sessionStorage.getItem('jwtAdmin') || !sessionStorage.getItem('cinema')) 
+      if(!sessionStorage.getItem('jwtAdmin') || !sessionStorage.getItem('cinemaId')) 
         next({path: '/admin'});
       else next();
     }

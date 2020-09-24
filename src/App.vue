@@ -4,6 +4,7 @@
     app
     fixed
     dark
+    height="80"
     v-if="
       $route.name != 'landingPage' &&
       $route.name != 'adminLogin' &&
@@ -13,13 +14,27 @@
     ">
       <v-row justify="center" align="center">
         <v-col class="d-none d-md-flex justify-center">
-          <img  
-          :src="require('./assets/logo.png')" 
-          height="70"
-          />
+          <div>
+            <img  
+            :src="require('./assets/logo.png')" 
+            height="70"
+            class="ma-0 pa-0"
+            />
+            <v-select
+            v-model="cinema"
+            :items="cinemas"
+            item-text="name"
+            item-value="name"
+            class="selectWidth"
+            label="cinema"
+            single-line
+            dense
+            >
+            </v-select>
+          </div>
         </v-col>
         <v-col class="d-flex justify-center">
-          <searchBar ref="search"/>
+          <searchBar :searched="searched" @searchOver="searchOver"/>
           <v-btn icon class="mt-2" @click="search">
               <v-icon>mdi-magnify</v-icon>
           </v-btn>
@@ -28,8 +43,6 @@
           :signUp="signUp"
           :account="account"
           :logOut="logOut"
-          @login="openLogin"
-          @signUp="openSignUp"
           @account="true"
           @logOut="true"
           />
@@ -63,7 +76,7 @@
       />
     </v-dialog>
     <v-content>
-      <router-view @loggedIn="loggedIn"/>
+      <router-view @loggedIn="loggedIn" @cinemaPicked="cinemaPicked"/>
     </v-content>
   </v-app>
 </template>
@@ -80,6 +93,9 @@ export default {
     authForm
   },
   data: () => ({
+    cinema: '',
+    cinemas: [],
+    searched: false,
     login: true,
     signUp: true,
     account: false,
@@ -88,10 +104,24 @@ export default {
     signUpDialog: false
   }),
   created: async function(){
+    console.log(this.$route.params);
     if(sessionStorage.getItem('jwt')) this.loggedIn();
+    await this.retrieveCinemas();
   },
   methods: {
-    search: function(){this.$refs.search.searchMovie();},
+    retrieveCinemas: async function(){
+      await fetch(`http://localhost:2020/cinemas/names`)
+      .then(async (resp) => {
+          let cinemas = await resp.json();
+          this.cinemas = cinemas;
+      })
+      .catch((error) => {
+          console.error('Error: ', error);
+          alert('something went wrong, try again');
+      });
+    },
+    search: function(){this.searched = true;},
+    searchOver: function(){this.searched = false;},
     closeLogin: function(){this.loginDialog = false;},
     closeSignUp: function(){this.signUpDialog = false;},
     loggedIn: function(){
@@ -108,14 +138,28 @@ export default {
       this.signUp = true;
       this.account = false;
       this.logOut = false;
-      if(this.$route.name != 'home') this.$router.push(sessionStorage.getItem('cinema') || '/');
+      if(this.$route.name != 'home') this.$router.push(this.cinema || '/');
+    },
+    cinemaPicked: function(){this.cinema = sessionStorage.getItem('cinemaName');}
+  },
+  watch: {
+    cinema(){
+      this.cinemas.forEach(cinema => {
+        if(cinema.name == this.cinema) sessionStorage.setItem('cinemaId', cinema._id);
+      });
+      sessionStorage.setItem('cinemaName', this.cinema);
+      this.$router.push(this.cinema);
     }
   }
 }
 </script>
 
-<style>
-#app {
+<style scoped>
+#app{
   background: rgb(33, 34, 31);
+}
+.selectWidth{
+  width: 130px;
+  margin: -20px 0 0 30px;
 }
 </style>

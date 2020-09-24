@@ -19,7 +19,7 @@ import authForm from '../components/authForm';
 export default {
     components: {authForm},
     created: async function(){
-        if(sessionStorage.getItem('jwt')) this.$router.push(sessionStorage.getItem('cinema') || '/');
+        if(sessionStorage.getItem('jwt')) this.$router.push(sessionStorage.getItem('cinemaName') || '/');
     }
 }
 </script>

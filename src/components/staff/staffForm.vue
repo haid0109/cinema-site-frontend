@@ -180,7 +180,7 @@ export default {
             });
         },
         retrieveInfo: async function(){
-            fetch(`http://localhost:2020/admin/${sessionStorage.getItem('cinema')}`, {
+            fetch(`http://localhost:2020/admin/${sessionStorage.getItem('cinemaId')}`, {
                 headers: {
                     authorization: `Bearer ${sessionStorage.getItem('jwtAdmin')}`,
                     role: 'admin'
@@ -230,7 +230,7 @@ export default {
             if(this.phoneNum) admin.phoneNum = this.phoneNum;
             if(this.address) admin.address = this.address;
 
-            fetch(`http://localhost:2020/admin/${sessionStorage.getItem('cinema')}`, {
+            fetch(`http://localhost:2020/admin/${sessionStorage.getItem('cinemaId')}`, {
                 method: 'PUT',
                 headers: {
                     'authorization': `Bearer ${sessionStorage.getItem('jwtAdmin')}`,

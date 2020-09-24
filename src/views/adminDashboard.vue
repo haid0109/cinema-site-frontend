@@ -74,7 +74,7 @@ export default {
     methods: {
         pickComponent: function(title){
             if(title == 'Log Out'){
-                sessionStorage.setItem('cinema', '');
+                sessionStorage.setItem('cinemaId', '');
                 this.$router.push('/admin');
             }
             this.componentPicker.forEach(element => {

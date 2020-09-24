@@ -18,7 +18,7 @@
 
 <script>
 export default {
-    props: ['search'],
+    props: ['searched'],
     data: () => ({
         movies: [],
         searchValue: '',
@@ -42,13 +42,28 @@ export default {
         searchMovie: async function(searchValue){
             if(searchValue){this.searchValue = searchValue}
             if(!this.searchValue) return alert('your search value is empty');
-            console.log(this.searchValue);
+            this.$router.push(
+                '/' + 
+                this.$route.params.cinema + 
+                '/movie/' +
+                this.clickItem
+            );
         },
     },
     watch: {
         clickItem(searchValue){
             if(!searchValue) return
             this.searchMovie(searchValue);
+        },
+        searched(){
+            if(this.searched){console.log(this.clickItem);}
+            this.$emit('searchOver');
+            this.$router.push(
+                '/' + 
+                this.$route.params.cinema + 
+                '/movie/' +
+                this.clickItem
+            );
         }
     }
 }

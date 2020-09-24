@@ -14,7 +14,7 @@
           text tile
           v-for="(cinema, index) in cinemaNames"
           :key="index"
-          @click="goToHome(cinema.name)"
+          @click="goToHome(cinema.name, cinema._id)"
           :ripple="false"
           height="125"
           width="45%"
@@ -48,9 +48,10 @@ export default {
         alert('Something went wrong, try again');
       });
     },
-    goToHome: function(cinemaName){
-      sessionStorage.setItem('cinema', cinemaName);
-      this.$router.push(cinemaName);
+    goToHome: function(name, _id){
+      sessionStorage.setItem('cinemaName', name);
+      sessionStorage.setItem('cinemaId', _id);
+      this.$emit('cinemaPicked');
     }
   } 
 }

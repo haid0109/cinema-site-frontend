@@ -17,17 +17,28 @@
         IN CINEMAS
       </div>
     </v-row>
+    <v-row class="ma-0 pa-0 justify-center">
+      <dateChooser v-if="true"/>
+    </v-row>
+    <v-row class="ma-0 pa-0">
+      <movieCards :cards="cards"/>
+    </v-row>
   </v-container>
 </template>
 
 <script>
+import dateChooser from '../components/dateChooser';
+import movieCards from '../components/movieCards';
+
 export default {
+  components: {dateChooser, movieCards},
   data: () => ({
     banners: [
       require('../assets/banner1.jpg'),
       require('../assets/banner2.jpg'),
       require('../assets/banner3.jpg')
-    ]
+    ],
+    cards: []
   }),
   created: async function(){
   },

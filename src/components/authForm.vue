@@ -167,11 +167,11 @@ export default {
                 if(this.type == 'user'){
                     sessionStorage.setItem('jwt', token);
                     this.$emit('loggedIn');
-                    if(this.extended) this.$router.push(sessionStorage.getItem('cinema') || '/');
+                    if(this.extended) this.$router.push(sessionStorage.getItem('cinemaName') || '/');
                 }
                 else if(this.type == 'admin'){
                     sessionStorage.setItem('jwtAdmin', token);
-                    sessionStorage.setItem('cinema', this.cinemaValue);
+                    sessionStorage.setItem('cinemaId', this.cinemaValue);
                     this.$emit('loggedIn');
                 }
             })
@@ -199,7 +199,7 @@ export default {
                 
                 sessionStorage.setItem('jwt', token);
                 this.$emit('loggedIn');
-                if(this.extended) this.$router.push(sessionStorage.getItem('cinema') || '/');
+                if(this.extended) this.$router.push(sessionStorage.getItem('cinemaName') || '/');
             })
             .catch((error) => {
                 console.error('Error: ', error);
