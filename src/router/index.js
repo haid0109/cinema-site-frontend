@@ -9,6 +9,7 @@ import account from '../views/account.vue';
 import chooseMovie from '../views/chooseMovie.vue';
 import movie from '../views/movie.vue';
 import performance from '../views/performance.vue';
+import bought from '../views/bought.vue';
 
 Vue.use(VueRouter)
 
@@ -69,6 +70,11 @@ const routes = [
     path: '/:cinema/movie/:movieId/:start',
     name: 'home',
     component: performance
+  },
+  {
+    path: '/bought/:phoneNum/:code',
+    name: 'bought',
+    component: bought
   },
 ]
 

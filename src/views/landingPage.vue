@@ -33,13 +33,14 @@ export default {
     cinemaNames: []
   }),
   created: async function(){
+    if(sessionStorage.getItem('cinemaName') && sessionStorage.getItem('cinemaId'))
+      return this.$router.push('/' + sessionStorage.getItem('cinemaName'));
     await this.retrieveLocations();
   },
   methods: {
     retrieveLocations: async function(){
       fetch(`http://localhost:2020/cinemas/names`)
       .then((resp) => {
-          console.log("retrieve locations: ", resp.status);
           return resp.json();
       })
       .then((resp) => this.cinemaNames = resp)

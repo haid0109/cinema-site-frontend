@@ -8,11 +8,22 @@
             v-for="(card, index) in moviesWithPerformances"
             :key="index"
             >
-                <v-img
-                min-height="400"
-                :src="card.cover"
-                />
-                <v-card-title>{{card.title}}</v-card-title>
+                <router-link
+                :to="`/${$route.params.cinema}/movie/${card._id}`"
+                >
+                    <v-img
+                    min-height="400"
+                    :src="card.cover"
+                    />
+                </router-link>
+
+                <router-link
+                :to="`/${$route.params.cinema}/movie/${card._id}`"
+                class="white--text"
+                style="text-decoration: none;"
+                >
+                    <v-card-title>{{card.title}}</v-card-title>
+                </router-link>
 
                 <v-card-subtitle class="py-2">{{`Movie Length: ${card.length}`}}</v-card-subtitle>
                 
@@ -61,7 +72,11 @@ export default {
         cards: []
     }),
     created: async function(){
-        await this.retrieveCards();
+        if(!this.$route.params.date){
+            this.setDateToday();
+            await this.retrieveCards();
+        }
+        else await this.retrieveCards();
     },
     methods: {
         getTime: function(start){
@@ -73,6 +88,7 @@ export default {
             return startTime;
         },
         retrieveCards: async function(){
+            if(!this.$route.params.date) this.setDateToday();
             let date = new Date(
                 this.$route.params.date.split('-')[2],
                 +this.$route.params.date.split('-')[1] - 1,
@@ -91,6 +107,14 @@ export default {
                 console.error('Error: ', error);
                 alert('something went wrong, try again');
             });
+        },
+        setDateToday: async function(){
+            let today = new Date();
+            this.$route.params.date =
+                today.getDate() + '-' +
+                (today.getMonth() + 1) + '-' +
+                today.getFullYear()
+            ;
         }
     },
     computed: {
@@ -102,6 +126,9 @@ export default {
     },
     watch: {
         '$route.params.date': function(){
+            this.retrieveCards();
+        },
+        '$route.params.cinema': function(){
             this.retrieveCards();
         }
     }

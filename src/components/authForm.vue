@@ -186,7 +186,6 @@ export default {
                 password: this.password
             }
             if(this.phoneNum) body.phoneNum = this.phoneNum;
-            console.log(body);
 
             fetch(`http://localhost:2020/user`, {
                 method: 'POST',

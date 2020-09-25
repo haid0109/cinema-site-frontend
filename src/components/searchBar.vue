@@ -56,7 +56,6 @@ export default {
             this.searchMovie(searchValue);
         },
         searched(){
-            if(this.searched){console.log(this.clickItem);}
             this.$emit('searchOver');
             this.$router.push(
                 '/' + 

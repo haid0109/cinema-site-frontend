@@ -15,11 +15,14 @@
       <v-row justify="center" align="center">
         <v-col class="d-none d-md-flex justify-center">
           <div>
-            <img  
-            :src="require('./assets/logo.png')" 
+            <router-link
+            :to="homeLink"
+            tag="img"
+            :src="require('./assets/logo.png')"
             height="70"
             class="ma-0 pa-0"
             />
+
             <v-select
             v-model="cinema"
             :items="cinemas"
@@ -49,12 +52,12 @@
         </v-col>
         <v-col class="d-none d-md-flex justify-center">
           <v-toolbar-items>
-              <v-btn text color="white">Program</v-btn>
-              <v-btn text color="white">Upcoming</v-btn>
-              <v-btn text color="white" v-if="login" @click="loginDialog = true">Login</v-btn>
-              <v-btn text color="white" v-if="signUp" @click="signUpDialog = true">Sign up</v-btn>
-              <v-btn text color="white" v-if="account" to="account">Account</v-btn>
-              <v-btn text color="white" v-if="logOut" @click="loggedOut">Log Out</v-btn>
+              <v-btn text dark @click="$router.push(homeLink)">Program</v-btn>
+              <v-btn text dark>Upcoming</v-btn>
+              <v-btn text dark v-if="login" @click="loginDialog = true">Login</v-btn>
+              <v-btn text dark v-if="signUp" @click="signUpDialog = true">Sign up</v-btn>
+              <v-btn text dark v-if="account" to="account">Account</v-btn>
+              <v-btn text dark v-if="logOut" @click="loggedOut">Log Out</v-btn>
           </v-toolbar-items>
         </v-col>
       </v-row>
@@ -94,6 +97,7 @@ export default {
   },
   data: () => ({
     cinema: '',
+    homeLink: '',
     cinemas: [],
     searched: false,
     login: true,
@@ -104,9 +108,9 @@ export default {
     signUpDialog: false
   }),
   created: async function(){
-    console.log(this.$route.params);
     if(sessionStorage.getItem('jwt')) this.loggedIn();
     await this.retrieveCinemas();
+    this.homeLink = '/' + sessionStorage.getItem('cinemaName');
   },
   methods: {
     retrieveCinemas: async function(){
@@ -138,7 +142,7 @@ export default {
       this.signUp = true;
       this.account = false;
       this.logOut = false;
-      if(this.$route.name != 'home') this.$router.push(this.cinema || '/');
+      if(this.$route.name != 'home') this.$router.push(('/' + this.cinema) || '/');
     },
     cinemaPicked: function(){this.cinema = sessionStorage.getItem('cinemaName');}
   },
@@ -148,7 +152,7 @@ export default {
         if(cinema.name == this.cinema) sessionStorage.setItem('cinemaId', cinema._id);
       });
       sessionStorage.setItem('cinemaName', this.cinema);
-      this.$router.push(this.cinema);
+      this.$router.push('/' + this.cinema);
     }
   }
 }
